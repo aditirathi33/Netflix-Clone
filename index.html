@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netflix Clone</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <style>
+    .bg-netflix {
+      background-color: #141414;
+    }
+    .hero-section {
+      background-size: cover;
+      background-position: center;
+      transition: background-image 1s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-netflix text-white">
+  <!-- Header -->
+  <header class="flex justify-between items-center p-4 bg-black">
+    <h1 class="text-3xl font-bold text-red-600">Netflix</h1>
+    <nav class="space-x-4">
+      <a href="#" class="hover:underline">Home</a>
+      <a href="#" class="hover:underline">TV Shows</a>
+      <a href="#" class="hover:underline">Movies</a>
+      <a href="#" class="hover:underline">New & Popular</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero-section text-center py-20 px-4">
+    <h2 class="text-4xl font-bold mb-4">Unlimited movies, TV shows and more</h2>
+    <p class="text-lg mb-6">Watch anywhere. Cancel anytime.</p>
+    <button onclick="randomPick()" class="bg-red-600 px-6 py-3 rounded hover:bg-red-700">Surprise Me 🎲</button>
+    <div id="surpriseOutput" class="mt-6 text-xl font-medium"></div>
+  </section>
+
+  <!-- Movie Categories -->
+  <section class="p-6">
+    <h3 class="text-2xl font-semibold mb-4">Popular on Netflix</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-gray-800 p-4 rounded cursor-pointer" onclick="openTrailer('Stranger Things')">Stranger Things</div>
+      <div class="bg-gray-800 p-4 rounded cursor-pointer" onclick="openTrailer('Money Heist')">Money Heist</div>
+      <div class="bg-gray-800 p-4 rounded cursor-pointer" onclick="openTrailer('Breaking Bad')">Breaking Bad</div>
+      <div class="bg-gray-800 p-4 rounded cursor-pointer" onclick="openTrailer('The Witcher')">The Witcher</div>
+      <div class="bg-gray-800 p-4 rounded cursor-pointer" onclick="openTrailer('The Crown')">The Crown</div>
+      <div class="bg-gray-800 p-4 rounded cursor-pointer" onclick="openTrailer('Wednesday')">Wednesday</div>
+      <div class="bg-gray-800 p-4 rounded cursor-pointer" onclick="openTrailer('Dark')">Dark</div>
+      <div class="bg-gray-800 p-4 rounded cursor-pointer" onclick="openTrailer('The Queen\'s Gambit')">The Queen's Gambit</div>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden">
+    <div class="bg-gray-900 p-6 rounded-lg w-full max-w-2xl relative">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-xl">✖</button>
+      <div id="videoContainer" class="aspect-w-16 aspect-h-9">
+        <!-- YouTube embed goes here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const shows = [
+      "Stranger Things", 
+      "Money Heist", 
+      "Breaking Bad", 
+      "The Crown", 
+      "Black Mirror",
+      "Wednesday",
+      "Dark",
+      "Narcos",
+      "The Queen's Gambit"
+    ];
+
+    const trailers = {
+      "Stranger Things": "https://www.youtube.com/embed/b9EkMc79ZSU",
+      "Money Heist": "https://www.youtube.com/embed/p_PJbmrX4uk",
+      "Breaking Bad": "https://www.youtube.com/embed/HhesaQXLuRY",
+      "The Witcher": "https://www.youtube.com/embed/ndl1W4ltcmg",
+      "The Crown": "https://www.youtube.com/embed/JWtnJjn6ng0",
+      "Wednesday": "https://www.youtube.com/embed/Q73UhUTs6y0",
+      "Dark": "https://www.youtube.com/embed/ESEUoa-mz2c",
+      "The Queen's Gambit": "https://www.youtube.com/embed/CDrieqwSdgI"
+    };
+
+    const heroImages = [
+  '/./1.jpg' ,
+  '/./2.jpg'
+];
+
+    let heroIndex = 0;
+    function rotateHeroBackground() {
+      const heroSection = document.getElementById("hero");
+      heroSection.style.backgroundImage = `url('${heroImages[heroIndex]}')`;
+      heroIndex = (heroIndex + 1) % heroImages.length;
+    }
+    setInterval(rotateHeroBackground, 5000);
+    rotateHeroBackground();
+
+    function randomPick() {
+      const pick = shows[Math.floor(Math.random() * shows.length)];
+      document.getElementById("surpriseOutput").innerText = `Watch next: ${pick}`;
+    }
+
+    function openTrailer(showName) {
+      const videoContainer = document.getElementById("videoContainer");
+      if (trailers[showName]) {
+        videoContainer.innerHTML = `<iframe width='100%' height='400' src='${trailers[showName]}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>`;
+        document.getElementById("modal").classList.remove("hidden");
+      } else {
+        videoContainer.innerHTML = `<p class='text-white text-center'>Trailer not available.</p>`;
+        document.getElementById("modal").classList.remove("hidden");
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("modal").classList.add("hidden");
+      document.getElementById("videoContainer").innerHTML = "";
+    }
+  </script>
+</body>
+</html>
